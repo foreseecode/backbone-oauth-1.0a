@@ -426,13 +426,16 @@
               saveData = options.data;
             } 
 
+            var contentType = options.contentType || "application/json; charset=utf-8";
+            contentType = (options.formData) ? false : contentType;
+
             return $.ajax(_.extend(options, {
                 type: reqType,
                 data: saveData,
                 xhrFields: {
                     withCredentials: false
                 },
-                contentType: options.contentType || "application/json; charset=utf-8",
+                contentType: contentType,
                 processData: options.processData || false,
                 //    crossDomain: false,
                 beforeSend: function (xhr) {
