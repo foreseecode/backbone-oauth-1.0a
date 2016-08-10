@@ -427,7 +427,7 @@
             } 
 
             var contentType = options.contentType || "application/json; charset=utf-8";
-            contentType = (options.formData) ? false : contentType;
+            contentType = (options.multipart) ? false : contentType;
 
             return $.ajax(_.extend(options, {
                 type: reqType,
