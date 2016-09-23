@@ -352,11 +352,11 @@
                 this.tokenSecret = tokenSecret;
             }
             // the url params
-			var surl = window.location.search || window.location.hash,
-				qindex = surl.indexOf('?');
-			if (qindex> -1) {
-				surl = surl.substr(qindex + 1);
-			}
+            var surl = window.location.search || window.location.hash,
+              qindex = surl.indexOf('?');
+            if (qindex> -1) {
+              surl = surl.substr(qindex + 1);
+            }
             var params = this.urlParamsToObj(surl.replace(/\?/g, ""));
             // get the verifier from the url
             this.verifier = params.oauth_verifier;
@@ -417,8 +417,6 @@
             this.token = accessToken
             this.verifier = "";
             this.dataObj = options.data;
-            var hg = this.headerGenerator();
-            var that = this;
 
             var saveData = "";
 
@@ -426,9 +424,16 @@
               saveData = options.data;
             } 
 
+            this.url = this._getUrl(url, reqType);
+
             var contentType = options.contentType || "application/json; charset=utf-8";
             contentType = (options.multipart) ? false : contentType;
 
+            if(options.responseType && (options.responseType === "blob" || options.responseType === "arraybuffer")) {
+              return this._rawXhr(url, reqType, options);
+            }
+
+            var that = this;
             return $.ajax(_.extend(options, {
                 type: reqType,
                 data: saveData,
@@ -439,22 +444,63 @@
                 processData: options.processData || false,
                 //    crossDomain: false,
                 beforeSend: function (xhr) {
-                   if(that.dataObj && reqType == "GET"){
-                        var queryString = that.qsString(that.dataObj);
-                        this.url = this.url + "?" + queryString;
-                      }
-                    if ($.browser.msie) {
-                      var sep = "?";
-                      if(this.url.indexOf("?")>-1){
-                        sep = "&";
-                      }
-                        this.url = this.url + sep + that.authHeader(hg(reqType, this.url, ""), true).replace(/"/g, "").replace(/, /g, "&");
-                    } else {
-                        xhr.setRequestHeader("Authorization", that.authHeader(hg(reqType,  this.url, "")));
-                    }
+                  xhr = that._addAuthHeader(xhr, reqType);
                 },
-                url: (url.indexOf('http') === 0) ? url : window.location.origin + url
+                url: this.url
             }));
+        },
+
+        _rawXhr(url, reqType, options) {
+          var def = $.Deferred(),
+              success = options.success || function () {},
+              error = options.error || function () {},
+              xhr = new XMLHttpRequest();
+          
+          def.done(success);
+          def.fail(error);
+
+          xhr.open('GET', this.url, true);
+          xhr = this._addAuthHeader(xhr, reqType);
+          xhr.responseType = options.responseType;
+          xhr.onreadystatechange = function (e) {
+              if(xhr.readyState === XMLHttpRequest.DONE) {
+                if(xhr.status === 200) {
+                  def.resolve(xhr.response, xhr.status, xhr);
+                } else {
+                  def.reject("HTTP error: " + xhr.status);
+                }
+              }
+          };
+          xhr.send();
+
+          return def.promise();
+        },
+
+        _getUrl(url, reqType) {
+          url = (url.indexOf('http') === 0) ? url : window.location.origin + url;
+          if(this.dataObj && reqType == "GET"){
+            var queryString = this.qsString(this.dataObj);
+            url = url + "?" + queryString;
+          }
+
+          if ($.browser.msie) {
+            var hg = this.headerGenerator();
+            var sep = "?";
+            if(url.indexOf("?")>-1){
+              sep = "&";
+            }
+            url = url + sep + this.authHeader(hg(reqType, url, ""), true).replace(/"/g, "").replace(/, /g, "&");
+          }
+
+          return url;
+        },
+
+        _addAuthHeader(xhr, reqType) {
+          if (!$.browser.msie) {
+            var hg = this.headerGenerator();
+            xhr.setRequestHeader("Authorization", this.authHeader(hg(reqType,  this.url, "")));
+          }
+          return xhr;
         }
     };
 
