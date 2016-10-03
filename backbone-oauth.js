@@ -450,7 +450,7 @@
             }));
         },
 
-        _rawXhr(url, reqType, options) {
+        _rawXhr: function(url, reqType, options) {
           var def = $.Deferred(),
               success = options.success || function () {},
               error = options.error || function () {},
@@ -476,7 +476,7 @@
           return def.promise();
         },
 
-        _getUrl(url, reqType) {
+        _getUrl: function(url, reqType) {
           url = (url.indexOf('http') === 0) ? url : window.location.origin + url;
           if(this.dataObj && reqType == "GET"){
             var queryString = this.qsString(this.dataObj);
@@ -495,7 +495,7 @@
           return url;
         },
 
-        _addAuthHeader(xhr, reqType) {
+        _addAuthHeader: function(xhr, reqType) {
           if (!$.browser.msie) {
             var hg = this.headerGenerator();
             xhr.setRequestHeader("Authorization", this.authHeader(hg(reqType,  this.url, "")));
