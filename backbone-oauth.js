@@ -1,4 +1,4 @@
-/* 
+/*
  * Backbone oAuth 1.0a Implementation
  * Version 1.01; Author Amin Moshgabadi (http://foresee.com) © 2013
  * This software may be freely distributed under the MIT license.
@@ -18,7 +18,7 @@
 
     //ie does not have window location origin
     if (!window.location.origin){
-        window.location.origin = window.location.protocol+"//"+window.location.host; 
+        window.location.origin = window.location.protocol+"//"+window.location.host;
     }
 
 
@@ -422,7 +422,7 @@
 
             if(reqType != "GET"){
               saveData = options.data;
-            } 
+            }
 
             this.url = this._getUrl(url, reqType);
 
@@ -450,12 +450,12 @@
             }));
         },
 
-        _rawXhr(url, reqType, options) {
+        _rawXhr: function (url, reqType, options) {
           var def = $.Deferred(),
               success = options.success || function () {},
               error = options.error || function () {},
               xhr = new XMLHttpRequest();
-          
+
           def.done(success);
           def.fail(error);
 
@@ -476,7 +476,7 @@
           return def.promise();
         },
 
-        _getUrl(url, reqType) {
+        _getUrl: function (url, reqType) {
           url = (url.indexOf('http') === 0) ? url : window.location.origin + url;
           if(this.dataObj && reqType == "GET"){
             var queryString = this.qsString(this.dataObj);
@@ -495,7 +495,7 @@
           return url;
         },
 
-        _addAuthHeader(xhr, reqType) {
+        _addAuthHeader: function (xhr, reqType) {
           if (!$.browser.msie) {
             var hg = this.headerGenerator();
             xhr.setRequestHeader("Authorization", this.authHeader(hg(reqType,  this.url, "")));
