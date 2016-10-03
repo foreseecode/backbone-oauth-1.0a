@@ -471,6 +471,11 @@
                 }
               }
           };
+          
+          if(options.contentType) {
+            xhr.setRequestHeader("Content-type", options.contentType);
+          }
+          
           xhr.send();
 
           return def.promise();
