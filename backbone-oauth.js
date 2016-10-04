@@ -311,11 +311,11 @@
                         // window.location.replace($.serverRoot + "/index.html");
                     },
                     beforeSend: function (xhr) {
-                        if ($.browser.msie) {
-                            this.url = this.url + "?" + that.authHeader(hg("get", this.url, "oauth_callback=" + location.href), true).replace(/"/g, "").replace(/, /g, "&");
-                        } else {
+                        // if ($.browser.msie) {
+                        //     this.url = this.url + "?" + that.authHeader(hg("get", this.url, "oauth_callback=" + location.href), true).replace(/"/g, "").replace(/, /g, "&");
+                        // } else {
                             xhr.setRequestHeader("Authorization", that.authHeader(hg("get", this.url, "oauth_callback=" + location.href)));
-                        }
+                        // }
                     },
                     url: (this.requestURL.indexOf('http') === 0) ? this.requestURL : window.location.origin + this.requestURL
                 });
@@ -384,11 +384,11 @@
                     throw("error validating access token");
                 },
                 beforeSend: function (xhr) {
-                    if ($.browser.msie) {
-                        this.url = this.url + "&" + that.authHeader(hg("get", this.url, ""), true).replace(/"/g, "").replace(/, /g, "&");
-                    } else {
+                    // if ($.browser.msie) {
+                    //     this.url = this.url + "&" + that.authHeader(hg("get", this.url, ""), true).replace(/"/g, "").replace(/, /g, "&");
+                    // } else {
                         xhr.setRequestHeader("Authorization", that.authHeader(hg("get", this.url, "")));
-                    }
+                    // }
                 },
                 url: (this.accessURL.indexOf("http") === 0) ? this.accessURL : window.location.origin + this.accessURL
             });
@@ -471,11 +471,11 @@
                 }
               }
           };
-          
+
           if(options.contentType) {
             xhr.setRequestHeader("Content-type", options.contentType);
           }
-          
+
           xhr.send();
 
           return def.promise();
@@ -488,23 +488,23 @@
             url = url + "?" + queryString;
           }
 
-          if ($.browser.msie) {
-            var hg = this.headerGenerator();
-            var sep = "?";
-            if(url.indexOf("?")>-1){
-              sep = "&";
-            }
-            url = url + sep + this.authHeader(hg(reqType, url, ""), true).replace(/"/g, "").replace(/, /g, "&");
-          }
+          // if ($.browser.msie) {
+          //   var hg = this.headerGenerator();
+          //   var sep = "?";
+          //   if(url.indexOf("?")>-1){
+          //     sep = "&";
+          //   }
+          //   url = url + sep + this.authHeader(hg(reqType, url, ""), true).replace(/"/g, "").replace(/, /g, "&");
+          // }
 
           return url;
         },
 
         _addAuthHeader: function(xhr, reqType) {
-          if (!$.browser.msie) {
+          //if (!$.browser.msie) {
             var hg = this.headerGenerator();
             xhr.setRequestHeader("Authorization", this.authHeader(hg(reqType,  this.url, "")));
-          }
+          //}
           return xhr;
         }
     };
