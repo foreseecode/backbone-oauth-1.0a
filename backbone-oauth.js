@@ -161,14 +161,17 @@
          */
         stringQs: function (s) {
             var query = {};
+            var qp = s.split('&');
 
-            s.replace(/\b([^&=]*)=([^&=]*)\b/g, function (m, a, d) {
-                if (typeof query[a] != 'undefined') {
-                    query[a] += ',' + d;
-                } else {
-                    query[a] = d;
+            for (let a of qp) {
+              if (a !== undefined) {
+                let b = a.split('=');
+
+                if (b[0] !== undefined && b[1] !== undefined) {
+                  query[b[0]] = b[1];
                 }
-            });
+              }
+            }
 
             return query;
         },
