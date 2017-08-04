@@ -162,15 +162,15 @@
         stringQs: function (s) {
             var query = {};
             var qp = s.split('&');
+            var param = qp.shift();
 
-            for (let a of qp) {
-              if (a !== undefined) {
-                let b = a.split('=');
+            while (param !== undefined) {
+              let parts = param.split('=');
 
-                if (b[0] !== undefined && b[1] !== undefined) {
-                  query[b[0]] = b[1];
-                }
+              if (parts[0] !== undefined && parts[1] !== undefined) {
+                query[parts[0]] = parts[1];
               }
+              param = qp.shift();
             }
 
             return query;
