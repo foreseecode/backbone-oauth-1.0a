@@ -163,9 +163,10 @@
             var query = {};
             var qp = s.split('&');
             var param = qp.shift();
+            var parts;
 
             while (param !== undefined) {
-              let parts = param.split('=');
+              parts = param.split('=');
 
               if (parts[0] !== undefined && parts[1] !== undefined) {
                 query[parts[0]] = parts[1];
