@@ -54,7 +54,7 @@ pipeline {
             steps {
                 script {
                     nvm(version: NODE_VERSION) {
-                        sh "npm lint"
+                        sh "npm run lint"
                     }
                 }
             }
