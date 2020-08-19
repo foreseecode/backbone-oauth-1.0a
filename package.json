@@ -1,13 +1,17 @@
 {
-  "name": "backbone-oauth-1.0a",
+  "name": "@foresee/backbone-oauth-1.0a",
   "version": "0.10.0",
   "description": "OAuth 1.0 implementation for Backbone",
   "main": "dist/index.js",
   "scripts": {
     "build": "rollup -c",
     "lint": "TIMING=1 eslint --ext .js . --cache",
-    "pre-commit": "npm run lint && npm test"
+    "pre-commit": "npm run lint && npm test",
+    "prepack": "npm run build"
   },
+  "files": [
+    "dist"
+  ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/foreseecode/backbone-oauth-1.0a.git"
